@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+img,
+svg,
+video {
+  @apply w-full h-full object-cover;
+}

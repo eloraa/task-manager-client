@@ -1,11 +1,11 @@
-import { ReactNode } from 'react';
 import { Header } from '../shared/Header';
+import { Outlet } from 'react-router-dom';
 
-export const Root = ({ children }: { children?: ReactNode }) => {
+export const Root = () => {
   return (
     <>
       <Header></Header>
-      {children}
+      <Outlet></Outlet>
     </>
   );
 };
