@@ -7,6 +7,7 @@ import { NotFound } from './Components/shared/NotFound';
 import { Home } from './Components/pages/Home';
 import { Login } from './Components/pages/Login';
 import { AuthProvider } from './Components/providers/AuthProvider';
+import { Registration } from './Components/pages/Registration';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: <Login></Login>,
+      },
+      {
+        path: '/register',
+        element: <Registration></Registration>,
       },
     ],
   },

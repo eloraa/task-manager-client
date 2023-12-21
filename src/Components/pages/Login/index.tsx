@@ -5,10 +5,12 @@ import { useAuthRedir } from '../../hooks/useAuthRedir';
 import { FormEvent, useContext, useRef, useState } from 'react';
 import { AuthContext, AuthContextProps } from '../../providers/AuthProvider';
 import { Toast } from '../../shared/Toast';
+import { TogglePassword } from '../../shared/TogglePassword';
 
 export const Login = () => {
   useAuthRedir();
   const [isUpdating, setIsUpdating] = useState(false);
+  const [viewPass, setViewPass] = useState(false);
   const formRef = useRef<HTMLFormElement | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ export const Login = () => {
     e.preventDefault();
 
     if (formRef.current) {
-      if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formRef.current.email.value)) Toast('Enter an Email to the field to reset the password.');
+      if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formRef.current.email.value)) Toast('Enter an email to the field to reset the password.');
       else
         resetPassword(formRef.current.email.value)
           .then(() => Toast('Check your email to reset your Password.'))
@@ -37,7 +39,7 @@ export const Login = () => {
     const password = form.password?.value;
 
     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
-      Toast('Enter a valid email to reset the password');
+      Toast('Enter a valid email');
       setIsUpdating(false);
       return;
     }
@@ -68,8 +70,9 @@ export const Login = () => {
             <li>
               <Input name="email" type="email" placeholder="Email" required></Input>
             </li>
-            <li>
-              <Input name="password" type="password" placeholder="Password" required></Input>
+            <li className="relative flex items-center">
+              <Input className='pr-12' name="password" type={viewPass ? 'text' : 'password'} placeholder="Password" required></Input>
+              <TogglePassword setViewPass={setViewPass} viewPass={viewPass}></TogglePassword>
             </li>
             <li>
               <a onClick={handleResetPassword} href="#" className="text-xs border-b border-black border-dashed transition-colors active:bg-black/15">
