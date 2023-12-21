@@ -14,6 +14,9 @@ const config: Config = {
         'white-coco': '#f7f5f2',
         'gray-white': '#dadce0',
       },
+      fontFamily: {
+        grotesk: "'Space Grotesk', 'Inter', sans-serif",
+      },
     },
   },
   plugins: [],

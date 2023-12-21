@@ -1,8 +1,11 @@
+import { useContext } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { AuthContext, AuthContextProps } from '../../providers/AuthProvider';
 
 export const Header = () => {
+  const { user, signOutUser } = useContext(AuthContext) as AuthContextProps;
   return (
-    <header className="md:px-8 px-4 py-6 flex items-center justify-between max-md:flex-wrap">
+    <header className="px-8 py-6 flex items-center justify-between">
       <h1 className="p-3 bg-blue-main text-coconut-fadedv2 stroke-[3] stroke-coconut-faded">
         <Link to="/">
           <div className="w-6 h-6">
@@ -17,28 +20,34 @@ export const Header = () => {
           </div>
         </Link>
       </h1>
-      <ul className="flex items-center gap-4 ml-auto md:mr-4">
+      <ul className="flex items-center gap-4 ml-auto md:mr-4 text-sm">
         <li>
-          <NavLink to="/" className={({ isActive }) => (isActive ? 'text-blue-main font-semibold' : 'font-semibold')}>
+          <NavLink to="/" className={({ isActive }) => (isActive ? 'text-blue-main font-medium' : 'font-medium')}>
             Home
           </NavLink>
         </li>
         <li>
-          <NavLink to="/about" className={({ isActive }) => (isActive ? 'text-blue-main font-semibold' : 'font-semibold')}>
+          <NavLink to="/about" className={({ isActive }) => (isActive ? 'text-blue-main font-medium' : 'font-medium')}>
             About
           </NavLink>
         </li>
         <li>
-          <NavLink to="/plans" className={({ isActive }) => (isActive ? 'text-blue-main font-semibold' : 'font-semibold')}>
+          <NavLink to="/plans" className={({ isActive }) => (isActive ? 'text-blue-main font-medium' : 'font-medium')}>
             Plans
           </NavLink>
         </li>
       </ul>
-      <div className="max-md:hidden">
-        <NavLink to="/login" className={({ isActive }) => (isActive ? 'text-blue-main font-semibold max-md:w-full' : 'font-semibold max-md:w-full')}>
-          <button className="py-2 px-4 rounded-full bg-coconut-faded w-full">Let&apos; Explore</button>
-        </NavLink>
-      </div>
+      {user ? (
+        <button onClick={signOutUser} className="font-semibold text-blue-main ml-2 transition-colors hover:bg-black/15 active:text-black border-b border-black border-dashed text-sm">
+          Logout
+        </button>
+      ) : (
+        <div>
+          <NavLink to="/login" className={({ isActive }) => (isActive ? 'text-blue-main font-medium max-md:w-full' : 'font-medium max-md:w-full')}>
+            <button className="ml-2 w-full transition-colors hover:bg-black/15 active:text-black border-b border-black border-dashed text-sm">Login</button>
+          </NavLink>
+        </div>
+      )}
     </header>
   );
 };
