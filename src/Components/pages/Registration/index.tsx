@@ -7,6 +7,7 @@ import { AuthContext, AuthContextProps } from '../../providers/AuthProvider';
 import { Toast } from '../../shared/Toast';
 import { TogglePassword } from '../../shared/TogglePassword';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { Spinner } from '../../utils/Spinner';
 type Inputs = {
   email: string;
   password: string;
@@ -33,8 +34,6 @@ export const Registration = () => {
 
     const { email, password } = data;
 
-    console.log(data);
-
     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
       Toast('Enter a valid email');
       setIsUpdating(false);
@@ -51,8 +50,7 @@ export const Registration = () => {
         .catch(err => {
           setIsUpdating(false);
 
-          if (err.code === 'auth/user-not-found') Toast('The user not found.');
-          if (err.code === 'auth/invalid-login-credentials' || err.code === 'auth/invalid-credential') Toast('Your password or email might be wrong.');
+          if (err.code === 'auth/email-already-in-use') Toast('This email address is already in use.');
           else Toast('An error occurred. Please try again later.', { isError: true });
         });
     }
@@ -93,7 +91,10 @@ export const Registration = () => {
               )}
             </li>
             <li>
-              <button className="py-2 mt-4 rounded bg-blue-main text-white font-grotesk font-semibold w-full transition-transform active:scale-y-95">Register</button>
+              <button className="py-2 mt-4 rounded bg-blue-main text-white font-grotesk font-semibold w-full transition-transform active:scale-y-95 relative">
+                <span className={`${isUpdating ? 'opacity-0' : ''}`}>Register</span>
+                {isUpdating && <Spinner></Spinner>}
+              </button>
             </li>
           </ul>
         </form>
@@ -102,6 +103,13 @@ export const Registration = () => {
           <Link to="/login" className="font-medium border-b border-black border-dashed transition-colors hover:bg-black/15">
             Login
           </Link>
+        </h4>
+
+        <h4 className="mt-6 text-sm">
+          By creating an account you're agreeing to our{' '}
+          <a href="#" className="font-medium border-b border-black border-dashed transition-colors hover:bg-black/15">
+            Terms of Service
+          </a>
         </h4>
       </div>
     </main>

@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Input } from '../../shared/Input';
+import Input from '../../shared/Input';
 import { Social } from '../../shared/SocialLogin';
 import { useAuthRedir } from '../../hooks/useAuthRedir';
 import { FormEvent, useContext, useRef, useState } from 'react';
@@ -71,7 +71,7 @@ export const Login = () => {
               <Input name="email" type="email" placeholder="Email" required></Input>
             </li>
             <li className="relative flex items-center">
-              <Input className='pr-12' name="password" type={viewPass ? 'text' : 'password'} placeholder="Password" required></Input>
+              <Input className="pr-12" name="password" type={viewPass ? 'text' : 'password'} placeholder="Password" required></Input>
               <TogglePassword setViewPass={setViewPass} viewPass={viewPass}></TogglePassword>
             </li>
             <li>

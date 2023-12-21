@@ -17,6 +17,47 @@ const config: Config = {
       fontFamily: {
         grotesk: "'Space Grotesk', 'Inter', sans-serif",
       },
+      keyframes: {
+        in: {
+          from: {
+            transform: 'translateY(100%)',
+            opacity: '0',
+          },
+          to: {
+            transform: 'translateY(0%)',
+            opacity: '1',
+          },
+        },
+        out: {
+          from: {
+            transform: 'translateY(0%)',
+            opacity: '1',
+          },
+          to: {
+            transform: 'translateY(100%)',
+            opacity: '0',
+          },
+        },
+        'scale-in': {
+          '0%': { transform: 'scale(0)' },
+          '100%': { transform: 'scale(1)' },
+        },
+        'scale-out': {
+          '0%': { transform: 'scale(1)' },
+          '100%': { transform: 'scale(0)' },
+        },
+        'translate-right': {
+          '0%': { transform: 'translate(0, 0)' },
+          '100%': { transform: 'translate(12px, 0)' },
+        },
+      },
+      animation: {
+        enter: 'in 200ms ease forwards',
+        leave: 'out 200ms ease forwards',
+        'scale-in': 'scale-in 0.6s infinite',
+        'scale-out': 'scale-out 0.6s infinite',
+        'translate-right': 'translate-right 0.6s infinite',
+      },
     },
   },
   plugins: [],

@@ -1,14 +1,24 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext, AuthContextProps } from '../../providers/AuthProvider';
+import { Spinner } from '../../utils/Spinner';
 
 export const Social = () => {
+  const [isUpdating, setIsUpdating] = useState(false);
   const { googleSignin } = useContext(AuthContext) as AuthContextProps;
+
+  const handSignIn = () => {
+    setIsUpdating(true);
+
+    googleSignin()
+      .then(() => setIsUpdating(false))
+      .catch(() => setIsUpdating(false));
+  };
   return (
     <div>
       <div className="mt-4">
         <button
-          onClick={googleSignin}
-          className="flex items-center justify-center font-grotesk w-full py-3 px-4 border border-gray-white text-sm font-medium transition-colors hover:bg-black/5 active:border-black active:text-black/80"
+          onClick={handSignIn}
+          className="flex items-center justify-center font-grotesk w-full py-3 px-4 border border-gray-white text-sm font-medium transition-colors hover:bg-black/5 active:border-black active:text-black/80 relative"
         >
           <div className="w-4 h-4">
             <svg viewBox="0 0 48 48">
@@ -21,7 +31,8 @@ export const Social = () => {
               </g>
             </svg>
           </div>
-          <span className="mx-auto">Continue with Google</span>
+          <span className={`${isUpdating ? 'opacity-0' : ''} mx-auto`}>Continue with Google</span>
+          {isUpdating && <Spinner></Spinner>}
         </button>
       </div>
       <h4 className="font-grotesk text-xs mt-6 text-center relative flex items-center justify-center">
