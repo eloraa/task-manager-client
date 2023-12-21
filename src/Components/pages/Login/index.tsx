@@ -39,9 +39,10 @@ export const Login = () => {
     if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
       Toast('Enter a valid email to reset the password');
       setIsUpdating(false);
+      return;
     }
 
-    if (email) {
+    if (email && password) {
       signIn(email, password)
         .then(() => {
           Toast('Signed in successfully.');
@@ -50,8 +51,9 @@ export const Login = () => {
         })
         .catch(err => {
           setIsUpdating(false);
+
           if (err.code === 'auth/user-not-found') Toast('The user not found.');
-          if (err.code === 'auth/invalid-login-credentials') Toast('Your password or email might be wrong.');
+          if (err.code === 'auth/invalid-login-credentials' || err.code === 'auth/invalid-credential') Toast('Your password or email might be wrong.');
           else Toast('An error occurred. Please try again later.', { isError: true });
         });
     }
@@ -64,10 +66,10 @@ export const Login = () => {
         <form ref={formRef} onSubmit={handleFormSubmit} className="mt-6">
           <ul className="grid gap-2">
             <li>
-              <Input name="email" type="email" placeholder="Email"></Input>
+              <Input name="email" type="email" placeholder="Email" required></Input>
             </li>
             <li>
-              <Input name="password" type="password" placeholder="Password"></Input>
+              <Input name="password" type="password" placeholder="Password" required></Input>
             </li>
             <li>
               <a onClick={handleResetPassword} href="#" className="text-xs border-b border-black border-dashed transition-colors active:bg-black/15">
