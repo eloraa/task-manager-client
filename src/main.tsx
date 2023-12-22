@@ -11,6 +11,7 @@ import { Registration } from './Components/pages/Registration';
 import { Plans } from './Components/pages/Plans';
 import { Setting } from './Components/pages/Setting';
 import { PrivateRoute } from './Components/utils/PrivateRoute';
+import { Dashboard } from './Components/pages/Dashboard';
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <Setting></Setting>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/dashboard',
+        element: (
+          <PrivateRoute>
+            <Dashboard></Dashboard>
           </PrivateRoute>
         ),
       },
