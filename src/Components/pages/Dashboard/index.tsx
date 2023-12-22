@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { TaskForm } from '../../shared/TaskForm';
+import { useTask } from '../../hooks/useTask';
+import { AuthContext, AuthContextProps } from '../../providers/AuthProvider';
 
 export const Dashboard = () => {
   const [popup, setPopup] = useState(false);
+  const { user } = useContext(AuthContext) as AuthContextProps;
+  const { tasks } = useTask(user?.uid || '');
   return (
     <main className="px-8 py-10">
       <div className="flex items-center justify-between mb-16">
@@ -15,6 +19,24 @@ export const Dashboard = () => {
           </figure>
           Create new task
         </button>
+      </div>
+      <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {tasks.map(task => (
+          <div className="py-10 px-6 bg-coconut-faded rounded-md" key={task.id}>
+            <h1 className="text-lg font-grotesk font-semibold">{task.title}</h1>
+            <p className="mt-2">{task.description}</p>
+            <ul className="grid mt-4 gap-2 text-sm">
+              <li className="flex items-center justify-between">
+                <span>Priority</span>
+                <h4 className='font-semibold text-rose-600'>{task.priority}</h4>
+              </li>
+              <li className="flex items-center justify-between">
+                <span>Deadline</span>
+                <h4 className='font-semibold text-rose-600'>{new Date(task.date).toDateString()}</h4>
+              </li>
+            </ul>
+          </div>
+        ))}
       </div>
       {popup && <TaskForm setPopup={setPopup}></TaskForm>}
     </main>
