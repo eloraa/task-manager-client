@@ -1,4 +1,9 @@
+import { useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthContext, AuthContextProps } from '../../providers/AuthProvider';
+
 export const Plans = () => {
+  const { user } = useContext(AuthContext) as AuthContextProps;
   return (
     <main className="px-8 py-10">
       <div className="text-center">
@@ -35,14 +40,20 @@ export const Plans = () => {
             <h1 className="text-xl">Free</h1>
             <h4>$0.00 / Month</h4>
           </div>
-          <button className="mt-4 py-4 rounded px-6 bg-blue-main text-white font-grotesk font-bold flex max-md:w-full justify-between md:gap-20 transition-transform active:scale-y-95">
-            Sign up now
-            <figure className="w-6 h-6">
-              <svg viewBox="0 0 24 24" fill="none" width="24" height="24" role="presentation" focusable="false">
-                <path d="M5 11.75h12m-5.25-6.5 6.25 6.5-6.25 6.5" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" vectorEffect="non-scaling-stroke"></path>
-              </svg>
-            </figure>
-          </button>
+          {user ? (
+            <h4 className='mt-4 text-rose-700 font-semibold'>Your current plan</h4>
+          ) : (
+            <Link to="/login" state="/plans">
+              <button className="mt-4 py-4 rounded px-6 bg-blue-main text-white font-grotesk font-bold flex max-md:w-full justify-between md:gap-20 transition-transform active:scale-y-95">
+                Sign up now
+                <figure className="w-6 h-6">
+                  <svg viewBox="0 0 24 24" fill="none" width="24" height="24" role="presentation" focusable="false">
+                    <path d="M5 11.75h12m-5.25-6.5 6.25 6.5-6.25 6.5" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" vectorEffect="non-scaling-stroke"></path>
+                  </svg>
+                </figure>
+              </button>
+            </Link>
+          )}
 
           <ul className="mt-10 grid gap-4 text-sm font-medium">
             <li className="flex items-center gap-1">
