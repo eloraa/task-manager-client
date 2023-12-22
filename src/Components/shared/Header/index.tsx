@@ -46,8 +46,8 @@ export const Header = () => {
             </figure>
           </button>
           {popup && (
-            <div className="absolute top-full max-md:w-screen pl-16 right-0  mt-4">
-              <div className="bg-white py-4 border border-black/15 drop-shadow text-sm">
+            <div className="absolute top-full max-md:w-screen pl-16 right-0 z-10 mt-4">
+              <div className="bg-white py-4 border border-black/15 drop-shadow shadow-black/15 text-sm">
                 <h1 className="px-6 whitespace-nowrap overflow-hidden text-ellipsis md:pr-20 mt-3">{user?.email}</h1>
                 <ul className="mt-4 font-medium">
                   <li>
