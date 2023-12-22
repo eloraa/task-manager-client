@@ -19,8 +19,8 @@ export interface AuthContextProps {
   user: User | null;
   signIn: (email: string, password: string) => Promise<UserCredential>;
   createUser: (email: string, password: string) => Promise<UserCredential>;
-  updateUser: (displayName: string, photoURL: string) => void;
-  verifyEmail: () => void;
+  updateUser: (displayName: string, photoURL: string) => Promise<void>;
+  verifyEmail: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   googleSignin: () => Promise<UserCredential>;
   signOutUser: () => Promise<void>;
@@ -59,15 +59,15 @@ export const AuthProvider = ({ children }: { children?: ReactNode }) => {
       return updateProfile(auth.currentUser, {
         displayName,
         photoURL,
-      });
+      }).then(() => setLoading(false));
     }
+    return new Promise<void>(res => res());
   };
   const verifyEmail = () => {
     if (auth.currentUser) {
-      sendEmailVerification(auth.currentUser);
-    } else {
-      return;
+      return sendEmailVerification(auth.currentUser);
     }
+    return new Promise<void>(res => res());
   };
   const resetPassword = (email: string) => sendPasswordResetEmail(auth, email);
 
