@@ -2,7 +2,13 @@ import { useContext, useState } from 'react';
 import { TaskForm } from '../../shared/TaskForm';
 import { useTask } from '../../hooks/useTask';
 import { AuthContext, AuthContextProps } from '../../providers/AuthProvider';
-
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  priority: string;
+  date: string;
+}
 export const Dashboard = () => {
   const [popup, setPopup] = useState(false);
   const { user } = useContext(AuthContext) as AuthContextProps;
@@ -21,18 +27,18 @@ export const Dashboard = () => {
         </button>
       </div>
       <div className="mt-8 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {tasks.map(task => (
+        {tasks.map((task: Task) => (
           <div className="py-10 px-6 bg-coconut-faded rounded-md" key={task.id}>
             <h1 className="text-lg font-grotesk font-semibold">{task.title}</h1>
             <p className="mt-2">{task.description}</p>
             <ul className="grid mt-4 gap-2 text-sm">
               <li className="flex items-center justify-between">
                 <span>Priority</span>
-                <h4 className='font-semibold text-rose-600'>{task.priority}</h4>
+                <h4 className="font-semibold text-rose-600">{task.priority}</h4>
               </li>
               <li className="flex items-center justify-between">
                 <span>Deadline</span>
-                <h4 className='font-semibold text-rose-600'>{new Date(task.date).toDateString()}</h4>
+                <h4 className="font-semibold text-rose-600">{new Date(task.date).toDateString()}</h4>
               </li>
             </ul>
           </div>
