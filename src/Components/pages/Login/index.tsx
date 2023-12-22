@@ -6,6 +6,7 @@ import { FormEvent, useContext, useRef, useState } from 'react';
 import { AuthContext, AuthContextProps } from '../../providers/AuthProvider';
 import { Toast } from '../../shared/Toast';
 import { TogglePassword } from '../../shared/TogglePassword';
+import { Spinner } from '../../utils/Spinner';
 
 export const Login = () => {
   useAuthRedir();
@@ -80,7 +81,10 @@ export const Login = () => {
               </a>
             </li>
             <li>
-              <button className="py-2 mt-4 rounded bg-blue-main text-white font-grotesk font-semibold w-full transition-transform active:scale-y-95">Login</button>
+              <button className="py-2 mt-4 rounded bg-blue-main text-white font-grotesk font-semibold w-full transition-transform active:scale-y-95 relative">
+                <span className={`${isUpdating ? 'opacity-0' : ''}`}>Login</span>
+                {isUpdating && <Spinner></Spinner>}
+              </button>
             </li>
           </ul>
         </form>

@@ -1,8 +1,9 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { AuthContext, AuthContextProps } from '../../providers/AuthProvider';
 
 export const Header = () => {
+  const [popup, setPopup] = useState(false);
   const { user, signOutUser } = useContext(AuthContext) as AuthContextProps;
   return (
     <header className="px-8 py-6 flex items-center justify-between">
@@ -38,9 +39,38 @@ export const Header = () => {
         </li>
       </ul>
       {user ? (
-        <button onClick={signOutUser} className="font-semibold text-blue-main ml-2 transition-colors hover:bg-black/15 active:text-black border-b border-black border-dashed text-sm">
-          Logout
-        </button>
+        <div className="relative flex items-center justify-center">
+          <button onClick={() => setPopup(!popup)} className="w-8 h-8 overflow-hidden rounded-full transition-colors border-2 border-transparent focus:border-black ml-2">
+            <figure>
+              <img src={user?.photoURL || ''} alt="" />
+            </figure>
+          </button>
+          {popup && (
+            <div className="absolute top-full max-md:w-screen pl-16 right-0  mt-4">
+              <div className="bg-white py-4 border border-black/15 drop-shadow text-sm">
+                <h1 className="px-6 whitespace-nowrap overflow-hidden text-ellipsis md:pr-20 mt-3">{user?.email}</h1>
+                <ul className="mt-4 font-medium">
+                  <li>
+                    <NavLink className={({ isActive }) => `${isActive ? 'bg-coconut-faded' : ''} px-6 py-2 block transition-colors hover:bg-coconut-faded`} to="/dashboard">
+                      Dashboard
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className={({ isActive }) => `${isActive ? 'bg-coconut-faded' : ''} px-6 py-2 block transition-colors hover:bg-coconut-faded`} to="/setting">
+                      Setting
+                    </NavLink>
+                  </li>
+                  <li className="border-b border-black/15 mx-6 my-1"></li>
+                  <li>
+                    <button onClick={signOutUser} className="px-6 py-2 transition-colors text-left hover:bg-coconut-faded w-full">
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
+        </div>
       ) : (
         <div>
           <NavLink to="/login" className={({ isActive }) => (isActive ? 'text-blue-main font-medium max-md:w-full' : 'font-medium max-md:w-full')}>
