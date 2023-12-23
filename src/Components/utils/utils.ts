@@ -23,3 +23,4 @@ export const selectFile = (e: ChangeEvent<HTMLInputElement>): Promise<string> =>
 };
 
 export const axios = client.create({ baseURL: import.meta.env.VITE_BACKENDSERVER });
+

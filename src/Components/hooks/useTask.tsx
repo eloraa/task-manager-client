@@ -1,26 +1,51 @@
 import { useQuery } from '@tanstack/react-query';
 import { axios } from '../utils/utils';
 
+interface Task {
+  id: string;
+  status: string;
+  title: string;
+  description: string;
+  date: string;
+  priority: string;
+}
+
 export const useTask = (id: string) => {
   const {
-    data: tasks = null,
+    data = null,
     isLoading,
     isRefetching,
     isError,
     refetch,
-  } = useQuery({
+  } = useQuery<Task[], Error>({
     queryKey: ['task', id],
     queryFn: async () => {
       try {
-        const res = await axios.get('/task/get/' + id);
-
-        return res.data || {};
+        const res = await axios.get<Task[]>('/task/get/' + id);
+        return res.data || [];
       } catch (err) {
-        console.log(err);
+        console.error(err);
         throw err;
       }
     },
   });
+
+  console.log(data);
+
+  const tasks = {
+    '1': {
+      title: 'To-do',
+      items: data ? data.filter(task => task.status.toLowerCase() === 'to-do') : [],
+    },
+    '2': {
+      title: 'Ongoing',
+      items: data ? data.filter(task => task.status.toLowerCase() === 'ongoing') : [],
+    },
+    '3': {
+      title: 'Completed',
+      items: data ? data.filter(task => task.status.toLowerCase() === 'completed') : [],
+    },
+  };
 
   return { tasks, isLoading, isRefetching, isError, refetch };
 };

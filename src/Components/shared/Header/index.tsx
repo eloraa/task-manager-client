@@ -6,7 +6,7 @@ export const Header = () => {
   const [popup, setPopup] = useState(false);
   const { user, signOutUser } = useContext(AuthContext) as AuthContextProps;
   return (
-    <header className="px-8 py-6 flex items-center justify-between">
+    <header className="px-8 py-6 flex items-center justify-between z-20">
       <h1 className="p-3 bg-blue-main text-coconut-fadedv2 stroke-[3] stroke-coconut-faded">
         <Link to="/">
           <div className="w-6 h-6">
@@ -45,7 +45,7 @@ export const Header = () => {
             onBlur={() => setTimeout(() => setPopup(false), 200)}
             className="w-8 h-8 overflow-hidden rounded-full transition-colors border-2 border-transparent focus:border-black max-md:ml-4"
           >
-            <figure>
+            <figure className='w-full h-full'>
               <img src={user?.photoURL || ''} alt="" />
             </figure>
           </button>

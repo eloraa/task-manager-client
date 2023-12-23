@@ -7,6 +7,7 @@ import { AuthContext, AuthContextProps } from '../../providers/AuthProvider';
 import { axios } from '../../utils/utils';
 import { Toast } from '../Toast';
 import { Spinner } from '../../utils/Spinner';
+import { QueryObserverResult } from '@tanstack/react-query';
 
 type Inputs = {
   title: string;
@@ -15,7 +16,9 @@ type Inputs = {
   priority: string;
 };
 
-export const TaskForm = ({ setPopup }: { setPopup: React.Dispatch<React.SetStateAction<boolean>> }) => {
+interface TaskData {}
+
+export const TaskForm = ({ setPopup, refetch }: { setPopup: React.Dispatch<React.SetStateAction<boolean>>; refetch: () => Promise<QueryObserverResult<TaskData, Error>> }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const {
     register,
@@ -32,6 +35,7 @@ export const TaskForm = ({ setPopup }: { setPopup: React.Dispatch<React.SetState
       const { success } = (await axios.post('/task/add', { uid: user.uid, email: user.email, ...data })).data;
 
       if (success) {
+        refetch();
         Toast('Task added successfully');
         setPopup(false);
         setIsUpdating(false);
@@ -96,7 +100,7 @@ export const TaskForm = ({ setPopup }: { setPopup: React.Dispatch<React.SetState
             </li>
             <li>{errors.priority && <h4 className="text-xs text-red-600 font-medium">{errors.priority.message}</h4>}</li>
           </ul>
-          <button className="py-3 mt-4 rounded bg-blue-main text-white font-grotesk font-semibold w-full transition-transform active:scale-y-95 relative">
+          <button className="py-3 rounded bg-blue-main mt-auto text-white font-grotesk font-semibold w-full transition-transform active:scale-y-95 relative">
             <span className={`${isUpdating ? 'opacity-0' : ''}`}>Submit</span>
             {isUpdating && <Spinner></Spinner>}
           </button>
