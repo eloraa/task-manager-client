@@ -4,13 +4,7 @@ import { useTask } from '../../hooks/useTask';
 import { AuthContext, AuthContextProps } from '../../providers/AuthProvider';
 import { Board } from '../../shared/Board';
 import { Loader } from '../../utils/Loader';
-interface Task {
-  id: number;
-  title: string;
-  description: string;
-  priority: string;
-  date: string;
-}
+
 export const Dashboard = () => {
   const [popup, setPopup] = useState(false);
   const { user } = useContext(AuthContext) as AuthContextProps;
@@ -48,7 +42,7 @@ export const Dashboard = () => {
             </div>
           ))}
       </div> */}
-      <Board></Board>
+      <Board tasks={tasks}></Board>
       {popup && <TaskForm refetch={refetch} setPopup={setPopup}></TaskForm>}
     </main>
   );
