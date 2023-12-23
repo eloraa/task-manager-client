@@ -41,11 +41,11 @@ export const Header = () => {
       {user ? (
         <div className="relative flex items-center justify-center">
           <button
-            onFocus={() => setPopup(true)}
             onBlur={() => setTimeout(() => setPopup(false), 200)}
+            onClick={() => setPopup(!popup)}
             className="w-8 h-8 overflow-hidden rounded-full transition-colors border-2 border-transparent focus:border-black max-md:ml-4"
           >
-            <figure className='w-full h-full'>
+            <figure className="w-full h-full">
               <img src={user?.photoURL || ''} alt="" />
             </figure>
           </button>

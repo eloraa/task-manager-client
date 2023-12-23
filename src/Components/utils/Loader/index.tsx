@@ -1,6 +1,8 @@
-export const Loader = () => {
+import { twMerge } from 'tailwind-merge';
+
+export const Loader = ({ className }: { className?: string }) => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-10 bg-coconut-faded">
+    <div className={twMerge('fixed inset-0 flex items-center justify-center z-10 bg-coconut-faded', className)}>
       <div className="w-24 h-24 [&_*]:w-24 [&_*]:h-24 [&_*]:absolute relative">
         <div className="inset-0 bg-red-700 blur-3xl"></div>
         <div className="[&_*]:bg-red-700/20 [&_*]:rounded-3xl [&_*]:border-2 [&_*]:border-red-700/90 animate-rotate [animation-fill-mode:forwards] [&_*]:[animation-fill-mode:forwards] [animation-delay:0.8s] [transform-style:preserve-3d] [transform:rotateX(-37.5deg)_rotateY(45deg)] [&_*]:origin-[50%_50%]">
