@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { axios } from '../utils/utils';
+import { ColumnType } from '../shared/Board';
 
-interface Task {
+export interface Task {
   id: string;
   status: string;
   title: string;
@@ -32,7 +33,7 @@ export const useTask = (id: string) => {
 
   console.log(data);
 
-  const tasks = {
+  const tasks: Record<string, ColumnType> = {
     '1': {
       title: 'To-do',
       items: data ? data.filter(task => task.status.toLowerCase() === 'to-do') : [],
