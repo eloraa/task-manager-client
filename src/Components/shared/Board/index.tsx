@@ -35,7 +35,7 @@ export const Board: React.FC<BoardProps> = ({ tasks, refetch }) => {
 
     setIsUpdating(result.draggableId);
     try {
-      const { success } = (await axios.patch('/task/update/' + result.draggableId, { status: tasksStateCopy[destination.droppableId].title })).data;
+      const { success } = (await axios.patch('/task/update/' + result.draggableId, { status: tasksStateCopy[destination.droppableId].title, index: result.destination.index })).data;
 
       if (success) {
         Toast('Successfully updated the status');
@@ -58,7 +58,7 @@ export const Board: React.FC<BoardProps> = ({ tasks, refetch }) => {
         {Object.entries(tasks).map(([columnId, column]) => (
           <Droppable key={columnId} droppableId={columnId}>
             {provided => (
-              <div className="grid gap-4 h-[50vh] auto-rows-max overflow-y-auto no-scroll" ref={provided.innerRef} {...provided.droppableProps}>
+              <div className="grid gap-4 h-[59vh] auto-rows-max overflow-y-auto no-scroll" ref={provided.innerRef} {...provided.droppableProps}>
                 <div className="sticky top-0 p-4 bg-white z-10">
                   <h1 className="font-grotesk flex items-center gap-2">
                     <div

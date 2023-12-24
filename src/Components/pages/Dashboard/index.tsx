@@ -12,7 +12,7 @@ export const Dashboard = () => {
   if (isLoading) return <Loader></Loader>;
 
   return (
-    <main className="px-8 py-10 relative">
+    <main className="px-8 pt-10 relative h-full pb-4">
       <div className="flex items-center justify-between mb-16">
         <h1 className="font-grotesk text-xl font-semibold">Dashboard</h1>
         <button onClick={() => setPopup(true)} className="flex gap-2 font-grotesk transition-transform active:scale-y-95 items-center font-semibold text-sm text-white bg-blue-main py-2 px-4 rounded">
