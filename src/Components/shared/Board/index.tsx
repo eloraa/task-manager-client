@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { Column } from '../Column';
 import { Loader } from '../../utils/Loader';
@@ -19,6 +19,8 @@ interface BoardProps {
 }
 
 export const Board: React.FC<BoardProps> = ({ tasks, refetch }) => {
+  const [isUpdating, setIsUpdating] = useState<string>('');
+
   if (!tasks) return <Loader></Loader>;
 
   const onDragEnd = async (result: DropResult) => {
@@ -31,18 +33,22 @@ export const Board: React.FC<BoardProps> = ({ tasks, refetch }) => {
     const [removedTask] = tasksStateCopy[source.droppableId].items.splice(source.index, 1);
     tasksStateCopy[destination.droppableId].items.splice(destination.index, 0, removedTask);
 
+    setIsUpdating(result.draggableId);
     try {
       const { success } = (await axios.patch('/task/update/' + result.draggableId, { status: tasksStateCopy[destination.droppableId].title })).data;
 
       if (success) {
         Toast('Successfully updated the status');
+        setIsUpdating('');
         refetch();
       } else {
         Toast(<h4 className="text-red-600">Something went wrong. Reverting changes.</h4>);
+        setIsUpdating('');
       }
     } catch (error) {
       console.log(error);
       Toast(<h4 className="text-red-600">Something went wrong. Reverting changes.</h4>);
+      setIsUpdating('');
     }
   };
 
@@ -65,7 +71,7 @@ export const Board: React.FC<BoardProps> = ({ tasks, refetch }) => {
                   </h1>
                 </div>
                 {column.items.map((item, index) => (
-                  <Column refetch={refetch} key={item.id} item={item} index={index} />
+                  <Column updating={isUpdating} refetch={refetch} key={item.id} item={item} index={index} />
                 ))}
                 {provided.placeholder}
               </div>

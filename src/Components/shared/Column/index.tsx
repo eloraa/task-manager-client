@@ -7,14 +7,16 @@ import { axios } from '../../utils/utils';
 import { Toast } from '../Toast';
 import { QueryObserverResult } from '@tanstack/react-query';
 import { TaskData, TaskForm } from '../TaskForm';
+import { Loader } from '../../utils/Loader';
 
 interface ColumnProps {
   item: Task;
   index: number;
+  updating: string;
   refetch: () => Promise<QueryObserverResult<TaskData, Error>>;
 }
 
-export const Column: React.FC<ColumnProps> = ({ item, index, refetch }) => {
+export const Column: React.FC<ColumnProps> = ({ item, index, refetch, updating }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [popup, setPopup] = useState(false);
 
@@ -44,7 +46,8 @@ export const Column: React.FC<ColumnProps> = ({ item, index, refetch }) => {
     <Draggable key={item.id} draggableId={item.id} index={index}>
       {provided => (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-          <div className="bg-coconut-faded mt-15 p-4 rounded-md">
+          <div className="bg-coconut-faded mt-15 p-4 rounded-md relative">
+            {updating === item.id && <Loader className='absolute scale-[.3] bg-transparent'></Loader>}
             <h1 className="font-grotesk font-medium">{item.title}</h1>
             <p className="mt-2 text-sm">{item.description}</p>
             <ul className="grid mt-4 gap-2 text-xs">
