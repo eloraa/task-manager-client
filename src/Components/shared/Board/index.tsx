@@ -24,7 +24,7 @@ export const Board: React.FC<BoardProps> = ({ tasks, refetch }) => {
   if (!tasks) return <Loader></Loader>;
 
   const onDragEnd = async (result: DropResult) => {
-    if (!result.destination) return;
+    if (!result.destination || (result.source.droppableId === result.destination.droppableId && result.source.index === result.destination.index)) return;
 
     const { source, destination } = result;
 
