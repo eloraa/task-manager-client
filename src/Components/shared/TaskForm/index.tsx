@@ -35,7 +35,7 @@ export const TaskForm = ({ setPopup, refetch, task }: { setPopup: React.Dispatch
     try {
       let success: boolean;
       if (!task) ({ success } = (await axios.post('/task/add', { uid: user.uid, email: user.email, ...data })).data);
-      else ({ success } = (await axios.post('/task/update/' + task.id, data)).data);
+      else ({ success } = (await axios.patch('/task/update/' + task.id, data)).data);
 
       if (success) {
         refetch();
@@ -96,7 +96,7 @@ export const TaskForm = ({ setPopup, refetch, task }: { setPopup: React.Dispatch
                 placeholder="Deadline"
                 type="datetime-local"
                 className="placeholder:text-[#8e8e8e] border-[#3b3b39] focus:border-white/30 max-md:appearance-none"
-                defaultValue={task?.date}
+                defaultValue={task ? task.date.slice(0, 10) : ''}
                 required
               ></Input>
             </li>
