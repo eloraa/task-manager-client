@@ -5,6 +5,8 @@ import { Loader } from '../../utils/Loader';
 import { Task } from '../../hooks/useTask';
 import { QueryObserverResult } from '@tanstack/react-query';
 import { TaskData } from '../TaskForm';
+import { Toast } from '../Toast';
+import { axios } from '../../utils/utils';
 
 export interface ColumnType {
   title: string;
@@ -17,27 +19,23 @@ interface BoardProps {
 }
 
 export const Board: React.FC<BoardProps> = ({ tasks, refetch }) => {
-  const onDragEnd = (result: DropResult) => {
+  if (!tasks) return <Loader></Loader>;
+
+  const onDragEnd = async (result: DropResult) => {
     if (!result.destination) return;
 
-    const { source, destination } = result;
+    const { destination } = result;
 
-    if (source.droppableId !== destination.droppableId) {
-      const sourceColumn = tasks[source.droppableId];
-      const destColumn = tasks[destination.droppableId];
-      const sourceItems = [...sourceColumn.items];
-      const destItems = [...destColumn.items];
-      const [removed] = sourceItems.splice(source.index, 1);
-      destItems.splice(destination.index, 0, removed);
-    } else {
-      const column = tasks[source.droppableId];
-      const copiedItems = [...column.items];
-      const [removed] = copiedItems.splice(source.index, 1);
-      copiedItems.splice(destination.index, 0, removed);
+    try {
+      const { success } = (await axios.patch('/task/update/' + result.draggableId, { status: tasks[destination.droppableId].title })).data;
+      if (success) {
+        Toast('Successfully updated the status');
+        refetch();
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
-
-  if (!tasks) return <Loader></Loader>;
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
