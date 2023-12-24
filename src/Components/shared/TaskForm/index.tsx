@@ -8,6 +8,7 @@ import { axios } from '../../utils/utils';
 import { Toast } from '../Toast';
 import { Spinner } from '../../utils/Spinner';
 import { QueryObserverResult } from '@tanstack/react-query';
+import { Task } from '../../hooks/useTask';
 
 type Inputs = {
   title: string;
@@ -16,9 +17,9 @@ type Inputs = {
   priority: string;
 };
 
-interface TaskData {}
+export interface TaskData {}
 
-export const TaskForm = ({ setPopup, refetch }: { setPopup: React.Dispatch<React.SetStateAction<boolean>>; refetch: () => Promise<QueryObserverResult<TaskData, Error>> }) => {
+export const TaskForm = ({ setPopup, refetch, task }: { setPopup: React.Dispatch<React.SetStateAction<boolean>>; refetch: () => Promise<QueryObserverResult<TaskData, Error>>; task?: Task }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const {
     register,
@@ -32,11 +33,13 @@ export const TaskForm = ({ setPopup, refetch }: { setPopup: React.Dispatch<React
   const handleFormSubmit: SubmitHandler<Inputs> = async data => {
     setIsUpdating(true);
     try {
-      const { success } = (await axios.post('/task/add', { uid: user.uid, email: user.email, ...data })).data;
+      let success: boolean;
+      if (!task) ({ success } = (await axios.post('/task/add', { uid: user.uid, email: user.email, ...data })).data);
+      else ({ success } = (await axios.post('/task/update/' + task.id, data)).data);
 
       if (success) {
         refetch();
-        Toast('Task added successfully');
+        Toast(`Task ${task ? 'updated' : 'added'} successfully`);
         setPopup(false);
         setIsUpdating(false);
       }
@@ -68,6 +71,7 @@ export const TaskForm = ({ setPopup, refetch }: { setPopup: React.Dispatch<React
                 minLength={2}
                 maxLength={200}
                 placeholder="Title"
+                defaultValue={task?.title}
                 type="text"
                 className="placeholder:text-[#8e8e8e] border-[#3b3b39] focus:border-white/30"
                 required
@@ -75,7 +79,15 @@ export const TaskForm = ({ setPopup, refetch }: { setPopup: React.Dispatch<React
             </li>
             <li>{errors.title && <h4 className="text-xs text-red-600 font-medium">{errors.title.message}</h4>}</li>
             <li>
-              <Textarea {...register('description')} minLength={2} placeholder="Description" rows={4} className="placeholder:text-[#8e8e8e] border-[#3b3b39] focus:border-white/30" required></Textarea>
+              <Textarea
+                {...register('description')}
+                minLength={2}
+                placeholder="Description"
+                rows={4}
+                className="placeholder:text-[#8e8e8e] border-[#3b3b39] focus:border-white/30"
+                required
+                defaultValue={task?.description}
+              ></Textarea>
             </li>
             <li>{errors.description && <h4 className="text-xs text-red-600 font-medium">{errors.description.message}</h4>}</li>
             <li>
@@ -84,12 +96,13 @@ export const TaskForm = ({ setPopup, refetch }: { setPopup: React.Dispatch<React
                 placeholder="Deadline"
                 type="datetime-local"
                 className="placeholder:text-[#8e8e8e] border-[#3b3b39] focus:border-white/30 max-md:appearance-none"
+                defaultValue={task?.date}
                 required
               ></Input>
             </li>
             <li>{errors.date && <h4 className="text-xs text-red-600 font-medium">{errors.date.message}</h4>}</li>
             <li>
-              <Select {...register('priority')} defaultValue="priority" className="placeholder:text-[#8e8e8e] border-[#3b3b39] focus:border-white/30" required>
+              <Select {...register('priority')} defaultValue={task?.priority || 'priority'} className="placeholder:text-[#8e8e8e] border-[#3b3b39] focus:border-white/30" required>
                 <option value="priority" disabled>
                   Priority
                 </option>

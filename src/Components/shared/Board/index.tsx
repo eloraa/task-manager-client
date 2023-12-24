@@ -1,54 +1,39 @@
-import { useState } from 'react';
+import React from 'react';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { Column } from '../Column';
 import { Loader } from '../../utils/Loader';
 import { Task } from '../../hooks/useTask';
+import { QueryObserverResult } from '@tanstack/react-query';
+import { TaskData } from '../TaskForm';
 
 export interface ColumnType {
   title: string;
   items: Task[];
 }
 
-export const Board: React.FC<{ tasks: Record<string, ColumnType> }> = ({ tasks }) => {
-  const [columns, setColumns] = useState<Record<string, ColumnType>>(tasks);
+interface BoardProps {
+  tasks: Record<string, ColumnType>;
+  refetch: () => Promise<QueryObserverResult<TaskData, Error>>;
+}
 
+export const Board: React.FC<BoardProps> = ({ tasks, refetch }) => {
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
     const { source, destination } = result;
 
     if (source.droppableId !== destination.droppableId) {
-      const sourceColumn = columns[source.droppableId];
-      const destColumn = columns[destination.droppableId];
+      const sourceColumn = tasks[source.droppableId];
+      const destColumn = tasks[destination.droppableId];
       const sourceItems = [...sourceColumn.items];
       const destItems = [...destColumn.items];
       const [removed] = sourceItems.splice(source.index, 1);
       destItems.splice(destination.index, 0, removed);
-
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...sourceColumn,
-          items: sourceItems,
-        },
-        [destination.droppableId]: {
-          ...destColumn,
-          items: destItems,
-        },
-      });
     } else {
-      const column = columns[source.droppableId];
+      const column = tasks[source.droppableId];
       const copiedItems = [...column.items];
       const [removed] = copiedItems.splice(source.index, 1);
       copiedItems.splice(destination.index, 0, removed);
-
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...column,
-          items: copiedItems,
-        },
-      });
     }
   };
 
@@ -57,7 +42,7 @@ export const Board: React.FC<{ tasks: Record<string, ColumnType> }> = ({ tasks }
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="grid md:grid-cols-3 gap-6">
-        {Object.entries(columns).map(([columnId, column]) => (
+        {Object.entries(tasks).map(([columnId, column]) => (
           <Droppable key={columnId} droppableId={columnId}>
             {provided => (
               <div className="grid gap-4 h-[50vh] auto-rows-max overflow-y-auto no-scroll" ref={provided.innerRef} {...provided.droppableProps}>
@@ -73,7 +58,7 @@ export const Board: React.FC<{ tasks: Record<string, ColumnType> }> = ({ tasks }
                   </h1>
                 </div>
                 {column.items.map((item, index) => (
-                  <Column key={item.id} item={item} index={index} />
+                  <Column refetch={refetch} key={item.id} item={item} index={index} />
                 ))}
                 {provided.placeholder}
               </div>

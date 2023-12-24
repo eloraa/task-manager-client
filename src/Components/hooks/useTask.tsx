@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { axios } from '../utils/utils';
 import { ColumnType } from '../shared/Board';
+import { useEffect, useState } from 'react';
 
 export interface Task {
   id: string;
@@ -12,6 +13,21 @@ export interface Task {
 }
 
 export const useTask = (id: string) => {
+  const [tasks, setTasks] = useState<Record<string, ColumnType>>({
+    '1': {
+      title: 'To-do',
+      items: [],
+    },
+    '2': {
+      title: 'Ongoing',
+      items: [],
+    },
+    '3': {
+      title: 'Completed',
+      items: [],
+    },
+  });
+
   const {
     data = null,
     isLoading,
@@ -31,22 +47,23 @@ export const useTask = (id: string) => {
     },
   });
 
-  console.log(data);
-
-  const tasks: Record<string, ColumnType> = {
-    '1': {
-      title: 'To-do',
-      items: data ? data.filter(task => task.status.toLowerCase() === 'to-do') : [],
-    },
-    '2': {
-      title: 'Ongoing',
-      items: data ? data.filter(task => task.status.toLowerCase() === 'ongoing') : [],
-    },
-    '3': {
-      title: 'Completed',
-      items: data ? data.filter(task => task.status.toLowerCase() === 'completed') : [],
-    },
-  };
+  useEffect(() => {
+    const _tasks: Record<string, ColumnType> = {
+      '1': {
+        title: 'To-do',
+        items: data ? data.filter(task => task.status.toLowerCase() === 'to-do') : [],
+      },
+      '2': {
+        title: 'Ongoing',
+        items: data ? data.filter(task => task.status.toLowerCase() === 'ongoing') : [],
+      },
+      '3': {
+        title: 'Completed',
+        items: data ? data.filter(task => task.status.toLowerCase() === 'completed') : [],
+      },
+    };
+    setTasks(_tasks);
+  }, [data]);
 
   return { tasks, isLoading, isRefetching, isError, refetch };
 };

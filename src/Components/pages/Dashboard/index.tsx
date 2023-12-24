@@ -10,6 +10,7 @@ export const Dashboard = () => {
   const { user } = useContext(AuthContext) as AuthContextProps;
   const { tasks, isLoading, refetch } = useTask(user?.uid || '');
   if (isLoading) return <Loader></Loader>;
+
   return (
     <main className="px-8 py-10 relative">
       <div className="flex items-center justify-between mb-16">
@@ -42,7 +43,7 @@ export const Dashboard = () => {
             </div>
           ))}
       </div> */}
-      <Board tasks={tasks}></Board>
+      <Board refetch={refetch} tasks={tasks}></Board>
       {popup && <TaskForm refetch={refetch} setPopup={setPopup}></TaskForm>}
     </main>
   );
