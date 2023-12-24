@@ -50,7 +50,7 @@ export const TaskForm = ({ setPopup, refetch, task }: { setPopup: React.Dispatch
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 z-10 pt-24">
+    <div className="fixed inset-0 bg-black/80 z-20 pt-24">
       <div className="max-md:w-full bg-[#121110] text-white py-10 px-8 h-full rounded-t-2xl max-w-md mx-auto flex flex-col animate-enter [animation-duration:500ms]">
         <div className="flex items-center justify-between">
           <h1 className="font-grotesk">Create a new task</h1>

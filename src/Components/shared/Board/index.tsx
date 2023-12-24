@@ -59,7 +59,7 @@ export const Board: React.FC<BoardProps> = ({ tasks, refetch }) => {
           <Droppable key={columnId} droppableId={columnId}>
             {provided => (
               <div className="grid gap-4 h-[50vh] auto-rows-max overflow-y-auto no-scroll" ref={provided.innerRef} {...provided.droppableProps}>
-                <div className="sticky top-0 p-4 bg-white">
+                <div className="sticky top-0 p-4 bg-white z-10">
                   <h1 className="font-grotesk flex items-center gap-2">
                     <div
                       className="w-2 h-2 bg-blue-main rounded-full"
