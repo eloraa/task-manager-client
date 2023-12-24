@@ -9,6 +9,7 @@ import { Toast } from '../Toast';
 import { Spinner } from '../../utils/Spinner';
 import { QueryObserverResult } from '@tanstack/react-query';
 import { Task } from '../../hooks/useTask';
+import { twMerge } from 'tailwind-merge';
 
 type Inputs = {
   title: string;
@@ -19,7 +20,17 @@ type Inputs = {
 
 export interface TaskData {}
 
-export const TaskForm = ({ setPopup, refetch, task }: { setPopup: React.Dispatch<React.SetStateAction<boolean>>; refetch: () => Promise<QueryObserverResult<TaskData, Error>>; task?: Task }) => {
+export const TaskForm = ({
+  setPopup,
+  refetch,
+  task,
+  className,
+}: {
+  setPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: () => Promise<QueryObserverResult<TaskData, Error>>;
+  task?: Task;
+  className?: string;
+}) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const {
     register,
@@ -51,10 +62,10 @@ export const TaskForm = ({ setPopup, refetch, task }: { setPopup: React.Dispatch
 
   return (
     <div className="fixed inset-0 bg-black/80 z-20 pt-24">
-      <div className="max-md:w-full bg-[#121110] text-white py-10 px-8 h-full rounded-t-2xl max-w-md mx-auto flex flex-col animate-enter [animation-duration:500ms]">
+      <div className={twMerge('max-md:w-full bg-[#121110] text-white py-10 px-8 h-full rounded-t-2xl max-w-md mx-auto flex flex-col animate-enter [animation-duration:500ms]', className)}>
         <div className="flex items-center justify-between">
           <h1 className="font-grotesk">Create a new task</h1>
-          <button onClick={() => setPopup(false)} className="transition-colors hover:bg-[#1f1f1e] p-1">
+          <button onClick={() => setPopup(false)} className="transition-colors hover:bg-[#1f1f1e] p-1 mix-blend-difference text-white">
             <figure className="w-6 h-6">
               <svg viewBox="0 0 24 24" fill="none" width="32" height="32" focusable="false" aria-label="Close">
                 <path d="m17.5 6.5-11 11m11 0-11-11" stroke="currentColor" strokeWidth="2" strokeMiterlimit="10" vectorEffect="non-scaling-stroke"></path>
